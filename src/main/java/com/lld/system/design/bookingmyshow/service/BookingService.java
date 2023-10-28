@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
+
 public class BookingService {
 
     private final Map<String, Booking> showBookings;
@@ -66,7 +66,7 @@ public class BookingService {
     }
     public List<Booking> getAllBookings(@NonNull final Show show) {
         List<Booking> response = new ArrayList<>();
-        for (Map.Entry<String,Booking>bookings : showBookings.entrySet()) {
+        for (Map.Entry<String, Booking> bookings : showBookings.entrySet()) {
             Booking booking = bookings.getValue();
             if (booking.getShow().equals(show)) { //all bookings for our show
                 response.add(booking);

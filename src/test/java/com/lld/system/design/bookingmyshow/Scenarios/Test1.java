@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Test1 extends BaseTest {
-
     @BeforeEach
     void setUp() {
         setupControllers(10, 0);

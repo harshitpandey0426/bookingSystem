@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
 public class InMemorySeatBookingLock implements SeatBookingLock {
     private Integer lockTimeout;
     private final Map<Show, Map<Seat, com.lld.system.design.bookingmyshow.model.SeatLock>> locks;

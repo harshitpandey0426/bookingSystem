@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Service
 public class MovieService {
 
     final Map<String, Movie> movies;

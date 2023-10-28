@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
 public class ShowService {
 
     private final Map<String, Show> shows;

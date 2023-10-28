@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping({"/api"})
 public class BookingController {
     private final ShowService showService;
     private final BookingService bookingService;
@@ -34,7 +32,6 @@ public class BookingController {
         this.theatreService = theatreService;
     }
 
-    @PostMapping("/createBooking")
     public String createBooking(@NonNull final String userId, @NonNull final String showId,
                                 @NonNull final List<String> seatsIds) {
         final Show show = showService.getShow(showId);

@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
 public class TheatreService {
     private final Map<String, Theatre> theatres;
     private final Map<String, Seat> seats;
