@@ -1,5 +1,6 @@
 package com.lld.system.design.bookingmyshow.Scenarios;
 
+import com.lld.system.design.bookingmyshow.model.City;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class Test1 extends BaseTest {
         String user1 = "User1";
         String user2 = "User2";
 
-        final String movie = movieController.createMovie("Movie 1");
+        final String movie = movieController.createMovie(City.Bangalore,"Movie 1");
         final String screen = setupScreen();
         final List<String> screen1SeatIds = createSeats(theatreController, screen, 2, 10);
 

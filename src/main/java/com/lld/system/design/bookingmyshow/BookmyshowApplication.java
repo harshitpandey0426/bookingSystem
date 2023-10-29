@@ -1,10 +1,15 @@
 package com.lld.system.design.bookingmyshow;
 
+import com.lld.system.design.bookingmyshow.model.City;
+import com.lld.system.design.bookingmyshow.model.Movie;
+import com.lld.system.design.bookingmyshow.model.Show;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @SpringBootApplication
 public class BookmyshowApplication {
@@ -22,10 +27,32 @@ public class BookmyshowApplication {
 		scanner.nextLine();
 		Map<String,Map<Integer,List<Integer>>>userAndSeats = new HashMap<>();
 
-		System.out.println("Number of users "+usersCount);
-		List<String>users = new ArrayList<>();
+		//------ SETUP START-------
+		setup.setupControllers(10, 0);
 
-	//Case: seat requirement for users came together, both users should not be able to book seats
+		//-----mcreate all movies-------
+		final String movie1 = setup.movieController.createMovie(City.Bangalore,"Movie 1");
+		final String movie2 = setup.movieController.createMovie(City.Bangalore,"Movie 2");
+		final String movie3= setup.movieController.createMovie(City.Delhi,"Movie 1");
+		final String movie4= setup.movieController.createMovie(City.Delhi,"Movie 2");
+
+		//------- create screen and seat-------
+		final String screen = setup.setupScreen();
+		final List<String> screen1SeatIds = setup.createSeats(setup.theatreController, screen, 2, 10);
+
+		//---- create shows--------
+		final String show1 = setup.showController.createShow(movie1, screen, new Date(), 2 * 60 * 60);
+		final String show2 = setup.showController.createShow(movie1, screen, new Date(), 2 * 40 * 60);
+
+		//------- helper methods for end user------
+		List<Movie>moviesInCity = setup.movieController.getMoviesByCity(City.Bangalore);
+		List<Show>allShows= setup.showController.getAllShow(City.Bangalore,setup.movieController.getMovie(movie1));
+		List<String> u1AvailableSeats = setup.showController.getAvailableSeats(show1);
+
+		//------SETUP ENDS-------
+
+	//Case: Seat booked by one user should be locked for other user
+		List<String>users = new ArrayList<>();
 		for(int i=0;i<usersCount;i++){
 			System.out.println("What is the user name?");
 			String userName = scanner.nextLine();
@@ -33,7 +60,6 @@ public class BookmyshowApplication {
 			System.out.println("Seat count for this user");
 			int seatCount = scanner.nextInt();
 			scanner.nextLine();
-			System.out.println(userName+" "+seatCount);
 			List<Integer>seatsForUser=new ArrayList<>();
 			for(int j=0;j<seatCount;j++){
 				System.out.println("Select seat numbers");
@@ -46,17 +72,9 @@ public class BookmyshowApplication {
 			userAndSeats.put(userName,countWithSeats);
 		}
 		scanner.close();
-		setup.setupControllers(10, 0);
-
-		final String movie = setup.movieController.createMovie("Movie 1");
-		final String screen = setup.setupScreen();
-		final List<String> screen1SeatIds = setup.createSeats(setup.theatreController, screen, 2, 10);
-
-		final String show = setup.showController.createShow(movie, screen, new Date(), 2 * 60 * 60);
-
-		List<String> u1AvailableSeats = setup.showController.getAvailableSeats(show);
 
 		ExecutorService executor = Executors.newFixedThreadPool(5);
+
 		//seats booked on fifo basis
 		for(Map.Entry<String,Map<Integer,List<Integer>>>userSeats:userAndSeats.entrySet()){
 			String user = userSeats.getKey();
@@ -69,24 +87,19 @@ public class BookmyshowApplication {
 				for(int i=0;i<seatCount;i++) {
 					userSelectedSeats.add(screen1SeatIds.get(seats.get(i)));
 				}
-//				final String bookingId1 = executor.submit(() -> setup.bookingController.createBooking(user, show, userSelectedSeats)).get();
-				final String bookingId1 = setup.bookingController.createBooking(user, show, userSelectedSeats);
+				Future<String> bookingIdFuture = executor.submit(() -> setup.bookingController.createBooking(user, show1, userSelectedSeats));
+				String bookingId1 = null;
+				try {
+					bookingId1 = bookingIdFuture.get();
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+//				final String bookingId1 = setup.bookingController.createBooking(user, show1, userSelectedSeats);
 				setup.paymentsController.paymentSuccess(bookingId1, user);
 			}
 		}
+		//------seat booking closed---------
+		executor.shutdown();
 		System.out.println("Seats booked Successfully");
 	}
-	private static boolean ifLocksAppliedCorrectly(List<String>excludedSeats,List<String>availableSeats){
-		for (String includedSeat: excludedSeats) {
-			if(availableSeats.contains(includedSeat)){
-				System.out.println("Locks are applied incorrectly");
-				return false;
-			}
-		}
-		System.out.println("Locks are applied correctly");
-		return true;
-	}
-
-
-
 }

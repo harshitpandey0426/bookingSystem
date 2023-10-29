@@ -11,5 +11,4 @@ public class Movie {
 
     private final String id;
     private final String name;
-    //Other metadata
 }

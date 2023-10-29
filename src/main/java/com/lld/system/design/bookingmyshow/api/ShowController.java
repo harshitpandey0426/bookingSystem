@@ -1,9 +1,6 @@
 package com.lld.system.design.bookingmyshow.api;
 
-import com.lld.system.design.bookingmyshow.model.Movie;
-import com.lld.system.design.bookingmyshow.model.Screen;
-import com.lld.system.design.bookingmyshow.model.Seat;
-import com.lld.system.design.bookingmyshow.model.Show;
+import com.lld.system.design.bookingmyshow.model.*;
 import com.lld.system.design.bookingmyshow.service.MovieService;
 import com.lld.system.design.bookingmyshow.service.SeatAvailabilityService;
 import com.lld.system.design.bookingmyshow.service.ShowService;
@@ -39,5 +36,9 @@ public class ShowController {
             seatIds.add(seat.getId());
         }
         return seatIds;
+    }
+
+    public List<Show> getAllShow(City city, Movie movie){
+        return showService.getAllShow(city,movie);
     }
 }

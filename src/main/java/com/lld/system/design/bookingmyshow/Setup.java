@@ -2,6 +2,7 @@ package com.lld.system.design.bookingmyshow;
 
 import com.lld.system.design.bookingmyshow.api.*;
 import com.lld.system.design.bookingmyshow.Utilities.InMemorySeatBookingLockStrategy;
+import com.lld.system.design.bookingmyshow.model.City;
 import com.lld.system.design.bookingmyshow.service.*;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class Setup {
     }
 
     protected String setupScreen() {
-        final String theatre = theatreController.createTheatre("Theatre 1");
+        final String theatre = theatreController.createTheatre("Theatre 1",City.Bangalore);
         return theatreController.createScreenInTheatre("Screen 1", theatre);
     }
 }

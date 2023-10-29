@@ -12,12 +12,13 @@ public class Theatre {
     private final String id;
     private final String name;
     private final List<Screen> screens;
-    //Other theatre metadata.
+    private final City city;
 
-    public Theatre(@NonNull final String id, @NonNull final String name) {
+    public Theatre(@NonNull final String id, @NonNull final String name,City city) {
         this.id = id;
         this.name = name;
         this.screens = new ArrayList<>();
+        this.city=city;
     }
 
     public void addScreen(@NonNull final  Screen screen) {

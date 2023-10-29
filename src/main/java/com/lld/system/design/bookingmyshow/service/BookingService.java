@@ -63,11 +63,12 @@ public class BookingService {
         }
         return seatsBooked;
     }
+    //all bookings for selected show
     public List<Booking> getAllBookings(@NonNull final Show show) {
         List<Booking> response = new ArrayList<>();
         for (Map.Entry<String, Booking> bookings : showBookings.entrySet()) {
             Booking booking = bookings.getValue();
-            if (booking.getShow().equals(show)) { //all bookings for our show
+            if (booking.getShow().equals(show)) {
                 response.add(booking);
             }
         }

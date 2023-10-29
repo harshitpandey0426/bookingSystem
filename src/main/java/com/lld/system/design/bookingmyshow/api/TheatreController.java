@@ -1,20 +1,19 @@
 package com.lld.system.design.bookingmyshow.api;
 
-import com.lld.system.design.bookingmyshow.model.Screen;
+import com.lld.system.design.bookingmyshow.model.*;
 import com.lld.system.design.bookingmyshow.service.TheatreService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import com.lld.system.design.bookingmyshow.model.Seat;
-import com.lld.system.design.bookingmyshow.model.Show;
-import com.lld.system.design.bookingmyshow.model.Theatre;
+
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
 public class TheatreController {
     final private TheatreService theatreService;
 
-    public String createTheatre(@NonNull final String theatreName) {
-        return theatreService.createTheatre(theatreName).getId();
+    public String createTheatre(@NonNull final String theatreName, City city) {
+        return theatreService.createTheatre(theatreName,city).getId();
     }
 
     public String createScreenInTheatre(@NonNull final String screenName, @NonNull final String theatreId) {
@@ -26,4 +25,6 @@ public class TheatreController {
         final Screen screen = theatreService.getScreen(screenId);
         return theatreService.createSeatInScreen(rowNo, seatNo, screen).getId();
     }
+
+
 }

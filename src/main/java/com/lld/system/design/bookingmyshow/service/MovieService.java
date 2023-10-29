@@ -17,6 +17,7 @@ public class MovieService {
 
     public MovieService() {
         this.movies = new HashMap<>();
+        cityMovieMap=new HashMap<>();
     }
     public Movie getMovie(@NonNull final String movieId) {
         if (!movies.containsKey(movieId)) {
@@ -25,10 +26,16 @@ public class MovieService {
         return movies.get(movieId);
     }
 
-    public Movie createMovie(final String movieName){
+    public Movie createMovie(City city,final String movieName){
         String  movieId = UUID.randomUUID().toString();
         Movie movie = new Movie(movieId, movieName);
         movies.put(movieId,movie);
+        List<Movie>allMoviesInCity = cityMovieMap.getOrDefault(city,new ArrayList<>());
+        allMoviesInCity.add(movie);
+        cityMovieMap.put(city,allMoviesInCity);
         return movie;
+    }
+    public List<Movie> getMoviesByCity(City city) {
+        return cityMovieMap.get(city);
     }
 }
