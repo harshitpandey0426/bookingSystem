@@ -57,6 +57,7 @@ public class BookmyshowApplication {
 		List<String> u1AvailableSeats = setup.showController.getAvailableSeats(show);
 
 		ExecutorService executor = Executors.newFixedThreadPool(5);
+		//seats booked on fifo basis
 		for(Map.Entry<String,Map<Integer,List<Integer>>>userSeats:userAndSeats.entrySet()){
 			String user = userSeats.getKey();
 			Map<Integer,List<Integer>> countWithSeats = userSeats.getValue();

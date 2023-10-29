@@ -2,19 +2,18 @@ package com.lld.system.design.bookingmyshow.service;
 
 import com.lld.system.design.bookingmyshow.model.Seat;
 import com.lld.system.design.bookingmyshow.model.Show;
-import com.lld.system.design.bookingmyshow.helper.SeatBookingLock;
+import com.lld.system.design.bookingmyshow.Utilities.SeatBookingLockStrategy;
 import lombok.NonNull;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeatAvailabilityService {
     private final BookingService bookingService;
-    private final SeatBookingLock seatBookingLockProvider;
+    private final SeatBookingLockStrategy seatBookingLockProvider;
 
     public SeatAvailabilityService(@NonNull final BookingService bookingService,
-                                   @NonNull final SeatBookingLock seatBookingLockProvider) {
+                                   @NonNull final SeatBookingLockStrategy seatBookingLockProvider) {
         this.bookingService = bookingService;
         this.seatBookingLockProvider = seatBookingLockProvider;
     }

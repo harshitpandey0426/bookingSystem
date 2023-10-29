@@ -1,18 +1,20 @@
 package com.lld.system.design.bookingmyshow.service;
 
+import com.lld.system.design.bookingmyshow.model.City;
 import com.lld.system.design.bookingmyshow.model.Movie;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 public class MovieService {
 
     final Map<String, Movie> movies;
+    Map<City, List<Movie>> cityMovieMap = new HashMap<>();
+    List<Movie>allMovies = new ArrayList<>();
+
     public MovieService() {
         this.movies = new HashMap<>();
     }

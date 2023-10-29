@@ -1,25 +1,21 @@
-package com.lld.system.design.bookingmyshow.helper;
+package com.lld.system.design.bookingmyshow.Utilities;
 
-import com.lld.system.design.bookingmyshow.exceptions.BadRequestException;
 import com.lld.system.design.bookingmyshow.exceptions.SeatAlreadyLockedException;
 import com.lld.system.design.bookingmyshow.model.Seat;
 import com.lld.system.design.bookingmyshow.model.SeatLock;
 import com.lld.system.design.bookingmyshow.model.Show;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 
 import java.util.*;
 
-public class InMemorySeatBookingLock implements SeatBookingLock {
+public class InMemorySeatBookingLockStrategy implements SeatBookingLockStrategy {
     private Integer lockTimeout;
     private final Map<Show, Map<Seat, com.lld.system.design.bookingmyshow.model.SeatLock>> locks;
 
     @Autowired
-    public InMemorySeatBookingLock(@NonNull Integer lockTimeout) {
+    public InMemorySeatBookingLockStrategy(@NonNull Integer lockTimeout) {
         this.locks = new HashMap<>();
         this.lockTimeout = lockTimeout;
     }
@@ -61,7 +57,6 @@ public class InMemorySeatBookingLock implements SeatBookingLock {
     public boolean validateLock(@NonNull final Show show, @NonNull final Seat seat, @NonNull final String user) {
         return isSeatLocked(show, seat) && locks.get(show).get(seat).getLockedBy().equals(user);
     }
-
     @Override
     public List<Seat> getLockedSeats(@NonNull final Show show) {
         if (!locks.containsKey(show)) {

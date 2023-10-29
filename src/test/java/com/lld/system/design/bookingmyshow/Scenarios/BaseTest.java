@@ -1,7 +1,9 @@
 package com.lld.system.design.bookingmyshow.Scenarios;
 
+import com.lld.system.design.bookingmyshow.Utilities.Context;
+import com.lld.system.design.bookingmyshow.Utilities.SeatBookingLockStrategy;
 import com.lld.system.design.bookingmyshow.api.*;
-import com.lld.system.design.bookingmyshow.helper.InMemorySeatBookingLock;
+import com.lld.system.design.bookingmyshow.Utilities.InMemorySeatBookingLockStrategy;
 import com.lld.system.design.bookingmyshow.service.*;
 import org.junit.Assert;
 
@@ -17,7 +19,8 @@ public class BaseTest {
     protected PaymentsController paymentsController;
 
     protected void setupControllers(int lockTimeout, int allowedRetries) {
-        final InMemorySeatBookingLock seatLockProvider = new InMemorySeatBookingLock(lockTimeout);
+        final SeatBookingLockStrategy seatLockProvider = new InMemorySeatBookingLockStrategy(lockTimeout);
+        Context context = new Context(seatLockProvider);
         final BookingService bookingService = new BookingService(seatLockProvider);
         final MovieService movieService = new MovieService();
         final ShowService showService = new ShowService();

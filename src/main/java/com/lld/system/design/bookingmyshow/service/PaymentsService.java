@@ -2,9 +2,8 @@ package com.lld.system.design.bookingmyshow.service;
 
 import com.lld.system.design.bookingmyshow.exceptions.BadRequestException;
 import com.lld.system.design.bookingmyshow.model.Booking;
-import com.lld.system.design.bookingmyshow.helper.SeatBookingLock;
+import com.lld.system.design.bookingmyshow.Utilities.SeatBookingLockStrategy;
 import lombok.NonNull;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +13,9 @@ public class PaymentsService {
 
     Map<Booking, Integer> bookingFailures;
     private final Integer allowedRetries;
-    private final SeatBookingLock seatBookingLockProvider;
+    private final SeatBookingLockStrategy seatBookingLockProvider;
 
-    public PaymentsService(@NonNull final Integer allowedRetries, SeatBookingLock seatBookingLockProvider) {
+    public PaymentsService(@NonNull final Integer allowedRetries, SeatBookingLockStrategy seatBookingLockProvider) {
         this.allowedRetries = allowedRetries;
         this.seatBookingLockProvider = seatBookingLockProvider;
         bookingFailures = new HashMap<>();

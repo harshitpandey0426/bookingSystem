@@ -1,31 +1,30 @@
 package com.lld.system.design.bookingmyshow.service;
 
 import com.lld.system.design.bookingmyshow.exceptions.BadRequestException;
+import com.lld.system.design.bookingmyshow.exceptions.NotFoundException;
 import com.lld.system.design.bookingmyshow.model.Booking;
 import com.lld.system.design.bookingmyshow.model.Seat;
 import com.lld.system.design.bookingmyshow.model.Show;
-import com.lld.system.design.bookingmyshow.helper.SeatBookingLock;
+import com.lld.system.design.bookingmyshow.Utilities.SeatBookingLockStrategy;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 
 public class BookingService {
-
     private final Map<String, Booking> showBookings;
-    private final SeatBookingLock seatBookingLockProvider;
+    private final SeatBookingLockStrategy seatBookingLockProvider;
 
     @Autowired
-    public BookingService(SeatBookingLock seatBookingLockProvider) {
+    public BookingService(SeatBookingLockStrategy seatBookingLockProvider) {
         this.seatBookingLockProvider = seatBookingLockProvider;
         this.showBookings = new HashMap<>();
     }
 
     public Booking getBooking(@NonNull final String bookingId) {
         if (!showBookings.containsKey(bookingId)) {
-//            throw new NotFoundException();
+            throw new NotFoundException();
         }
         return showBookings.get(bookingId);
     }
